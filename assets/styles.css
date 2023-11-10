@@ -1,0 +1,135 @@
+html {
+  height: 100%;
+}
+
+body {
+  background-color: black;
+  background: linear-gradient(
+  180deg,
+  rgb(102, 128, 123) 0%,
+  rgba(78, 92, 90, 1) 30%,
+  rgba(14, 14, 14, 1) 100%
+  );
+  background-size: 100%;
+  text-align: center;
+  font-family: 'Press Start 2P', cursive, Arial, sans-serif;
+}
+
+h1,
+h3,
+h5,
+p {
+color: white;
+}
+
+h1 {
+  font-size: 1.5em;
+  color: rgb(255, 255, 255);
+  margin: 0.5em;
+}
+
+h3 {
+  font-size: 1em;
+}
+
+.grid {
+  position: relative;
+  width: 760px;
+  height: 760px;
+  border: 2px solid rgb(212, 212, 212);
+  display: flex;
+  flex-wrap: wrap;
+  margin: -2px auto;
+}
+
+.grid div {
+  background-color: #111111;
+  border: 1px solid #103623;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
+  color: green;
+}
+
+.grid .thick-line-bottom {
+  border-bottom: 2px solid rgb(172, 135, 0);
+}
+
+.grid .thick-line-left {
+  border-left: 2px solid rgb(172, 135, 0);
+}
+
+.grid .origin {
+  border-bottom: 2px solid rgb(172, 135, 0);
+  border-left: 2px solid rgb(172, 135, 0);
+}
+
+.grid .arrow-right, .grid .arrow-up {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.grid .arrow-right{
+  top: 389px;
+  left: 749px;
+
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+
+  border-left: 10px solid rgb(172, 135, 0);
+}
+
+.grid .arrow-up {
+  top: 0px;
+  left: 371px;
+
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+
+  border-bottom: 10px solid rgb(172, 135, 0);
+}
+
+.grid .right-axis-end::after {
+  position: relative;
+  top: -10px;
+  z-index: 30;
+  content: 'X';
+  color: red;
+}
+
+.grid .top-axis-end::before {
+  position: relative;
+  right: -10px;
+  z-index: 30;
+  content: 'Y';
+  color: lime;
+}
+
+#redBall.red-ball {
+  position: absolute;
+  z-index: 100;
+  top: 120px;
+  left: 20px;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-image: url("redball.jpg");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+#block.block {
+  position: absolute;
+  z-index: 99;
+  top: 160px;
+  left: 20px;
+  height: 20px;
+  width: 40px;
+  border-top: 8px solid limegreen ;
+  background-color: goldenrod;
+}
+
+.hidden {
+  display: none;
+}

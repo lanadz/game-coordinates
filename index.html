@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="assets/styles.css?v=3">
+    <script path="./index.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"></link>
+    <title>RedBall coordinates</title>
+  </head>
+
+  <body>
+  <!-- <audio id="bg_music_1" src="/assets/music/tetris-gameboy-01.mp3"
+  type="audio/mpeg"></audio> -->
+
+  <h1>
+  Help redball to get to the finish!
+  </h1>
+
+  <div class="grid game" id="grid">
+    <script lang="javascript">
+      container = document.getElementById('grid');
+      // we have 1444 squares, 38 squares in a row and 38 rows
+      // origin will be in the middle of the grid meaning 19 * 38 + 19 = 741
+      const totalSquares = 1444;
+
+      for (i = 0; i < totalSquares; i++) {
+      container.appendChild(document.createElement('div'));
+      }
+
+      const originDivIndex = 742;
+      const boundaryModCoordinate = 19;
+      const axisStartIndex = originDivIndex - boundaryModCoordinate;
+      const axisEndIndex = originDivIndex + boundaryModCoordinate;
+      const rowColCount = 38;
+      const redBallSize = 30;
+
+      let origin = container.children[originDivIndex];
+      origin.classList.add('origin');
+
+      // Axis X
+      let axisX = [];
+
+      for (let i = axisStartIndex; i < axisEndIndex; i++) {
+      axisX.push(container.children[i]);
+      }
+      axisX.forEach((sq) => sq.classList.add('thick-line-bottom'));
+
+      // Axis Y
+      let axisY = [];
+
+      for (let i = 0; i < totalSquares; i += boundaryModCoordinate) {
+      if (i % 2 == 1 ){ // to avoid drawing the second line
+      axisY.push(container.children[i + 1]);
+      }
+      }
+      axisY.forEach((sq) => sq.classList.add('thick-line-left'));
+
+      // Draw arrow x
+      container.children[originDivIndex + boundaryModCoordinate -
+      1].classList.add('right-axis-end');
+      const arrowRight = container.appendChild(document.createElement('div'));
+      arrowRight.classList.add('arrow-right');
+
+      // Draw arrow y
+      container.children[boundaryModCoordinate + 1 ].classList.add('top-axis-end');
+      const arrowUp = container.appendChild(document.createElement('div'));
+      arrowUp.classList.add('arrow-up');
+
+
+      function moveBall() {
+      const redBall = document.getElementById('redBall')
+      let xVal = parseInt(document.coords.x.value);
+      let yVal = parseInt(document.coords.y.value);
+
+      let x = 0;
+      let y = 0;
+      [x, y] = convertToGridCoordinates(xVal, yVal);
+      [x, y] = shiftForBallSize(x, y);
+
+      redBall.style.left = x + 'px';
+      redBall.style.top = y + 'px';
+      }
+
+      function shiftForBallSize(x, y) {
+      x = x - redBallSize / 2;
+      return [x, y];
+      }
+
+      function convertToGridCoordinates(x,y) {
+      // let x = 0;
+      // let y = 0;
+      let xGrid = 0;
+      let yGrid= 0;
+
+      if (x > -boundaryModCoordinate && x < boundaryModCoordinate &&
+      y > -boundaryModCoordinate && y < boundaryModCoordinate) {
+      xGrid = boundaryModCoordinate * 20 + x * 20;
+      yGrid= boundaryModCoordinate * 20 - y * 20;
+      console.log("in", xGrid, yGrid);
+
+      } else {
+      alert('Red ball fell off the grid. Please try again.');
+      }
+      console.log(xGrid, yGrid);
+      return [xGrid, yGrid];
+      }
+
+    </script>
+
+  <div id="redBall" class="red-ball"></div>
+  <div id="block" class="block"></div>
+  </div>
+
+
+  <form id="coords" name="coords" action="" method="get">
+  <input type="text" name="x" value="0" size="4" maxlength="4" />
+  <input type="text" name="y" value="0" size="4" maxlength="4" />
+  <input type="submit" value="Jump"/>
+  </form>
+
+  <script lang="javascript">
+
+  const form=document.getElementById("coords");
+
+  function submitForm(event){
+  event.preventDefault();
+  moveBall();
+  }
+
+  form.addEventListener('submit', submitForm);
+  </script>
+  <p>This game is dedicated to my son. Andrew, you are the best. Love, mom.</p>
+  <p>Svitlana Dzyuban &copy; 2023</p>
+
+  </body>
+
+</html>
