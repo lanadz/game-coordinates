@@ -109,8 +109,8 @@ h3 {
 #redBall.red-ball {
   position: absolute;
   z-index: 100;
-  top: 120px;
-  left: 20px;
+  top: 0;
+  left: 0;
   height: 30px;
   width: 30px;
   border-radius: 50%;
@@ -131,5 +131,5 @@ h3 {
 }
 
 .hidden {
-  display: none;
+  display: none important!;
 }
