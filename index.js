@@ -52,6 +52,7 @@ window.onload = () => {
 
   ({ x: generatedX, y: generatedY } = generateRandomPoint());
   console.log("generated point: ", generatedX, generatedY);
+  const adjustmentY = 10;
 
   document.getElementById('jump').addEventListener('click', function(e) {
     e.preventDefault();
@@ -64,8 +65,8 @@ window.onload = () => {
 
     const redBall = document.getElementById('redBall');
     redBall.classList.remove('hidden');
-    redBall.style.left = canvasX - 8 + 'px';
-    redBall.style.top = canvasY - 8 + 'px';
+    redBall.style.left = (canvasX - 8) + 'px';
+    redBall.style.top = (canvasY - 8 + adjustmentY) + 'px';
     // Draw projection lines
     ctx.strokeStyle = 'pink';
     ctx.beginPath();
