@@ -18,7 +18,7 @@
           <p>Go to (x, y) to</p>
           <p>the green point!</p>
         </div>
-        <form id="coords" class="coords" name="coords" action="" method="get">
+        <form id="coords" class="form" name="coords" action="" method="get">
           <label for="x">x</label><input type="number" name="x" id="x" size="2" placeholder="0" value="0" />
           <label for="y">y</label><input type="number" name="y" id="y" size="2" placeholder="0" value="0"/>
           <input type="submit" id="jump" value="Jump"/>
@@ -28,6 +28,9 @@
 
         <p>History:</p>
         <div id="history" class="instructions">
+        </div>
+        <div class="form">
+          <button id="clean" class="btn">Restart!</button>
         </div>
       </div>
 
