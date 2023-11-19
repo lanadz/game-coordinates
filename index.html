@@ -10,33 +10,35 @@
   </head>
 
   <body>
-  <!-- <audio id="bg_music_1" src="/assets/music/tetris-gameboy-01.mp3"
-  type="audio/mpeg"></audio> -->
+    <h1>Move <span class="red">Red Ball</span> around!</h1>
 
-  <h1>
-  Help redball to get to the finish!
-  </h1>
+    <div class="horizontal-container">
+      <div class="vertical-container">
+        <div id="instructions" class="instructions">
+          Go to (x, y)
+        </div>
+        <form id="coords" class="coords" name="coords" action="" method="get">
+          <label for="x">x</label><input type="number" name="x" id="x" size="2" placeholder="0" />
+          <label for="y">y</label><input type="number" name="y" id="y" size="2" placeholder="0" />
+          <input type="submit" id="jump" value="Jump"/>
+        </form>
 
-  <div class="game">
-    <div class="grid" id="grid">
+        <div id="result" class="instructions"></div>
+      </div>
+
+      <div class="vertical-container">
+        <div class="game">
+          <canvas id="coordinate-system" width="500" height="500"></canvas>
+          <div id="tooltip" style="position: absolute; display: none;"></div>
+
+          <div id="redBall" class="red-ball hidden"></div>
+          <div id="point" class="point hidden"></div>
+        </div>
+      </div>
     </div>
 
-    <div id="redBall" class="red-ball"></div>
-    <div id="block" class="block hidden"></div>
-    <div id="point" class="point"></div>
-    <div id="instructions" class="instructions"></div>
-    <form id="coords" class="coords" name="coords" action="" method="get">
-      <input type="text" name="x" placeholder="0" size="4" maxlength="4" />
-      <input type="text" name="y" placeholder="0" size="4" maxlength="4" />
-      <input type="submit" value="Jump"/>
-    </form>
-  </div>
-
-
-
-  <p>This game is dedicated to my son. Andrew, you are the best. Love, mom.</p>
-  <p>Svitlana Dzyuban &copy; 2023</p>
+    <p>This game is dedicated to my son. Andrew, you are the best. Love, mom.</p>
+    <p>Svitlana Dzyuban &copy; 2023</p>
 
   </body>
-
 </html>

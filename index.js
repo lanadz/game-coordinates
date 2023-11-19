@@ -1,145 +1,98 @@
 window.onload = () => {
-  container = document.getElementById('grid');
-  // we have 1444 squares, 38 squares in a row and 38 rows
-  // origin will be in the middle of the grid meaning 19 * 38 + 19 = 741
-  const totalSquares = 1444;
 
-  for (i = 0; i < totalSquares; i++) {
-    let div = container.appendChild(document.createElement('div'));
-    div.style.left = `${(i % 38) * 20}px`;
-    div.style.top = `${Math.floor(i / 38) * 20}px`;
+  const canvas = document.getElementById('coordinate-system');
+  const ctx = canvas.getContext('2d');
+  const step = 25;
+
+  // Draw the axes
+  ctx.beginPath();
+  ctx.moveTo(0, canvas.height / 2);
+  ctx.lineTo(canvas.width, canvas.height / 2);
+  ctx.moveTo(canvas.width / 2, 0);
+  ctx.lineTo(canvas.width / 2, canvas.height);
+  ctx.stroke();
+
+  // Draw the markers on X-axis
+  for (let i = step; i < canvas.width; i += step) {
+    ctx.beginPath();
+    ctx.moveTo(i, canvas.height / 2 - 5);
+    ctx.lineTo(i, canvas.height / 2 + 5);
+    ctx.stroke();
+
+     // Draw the label
+     let label = (i - canvas.width / 2) / step;
+    ctx.fillText(label, i - 5, canvas.height / 2 - 10);
   }
 
-  const boundaryModCoordinate = 19;
-  const originDivIndex = totalSquares/2 - boundaryModCoordinate ;
-  const axisStartIndex = originDivIndex - boundaryModCoordinate;
-  const axisEndIndex = originDivIndex + boundaryModCoordinate;
-  const rowColCount = 38;
-  const redBallSize = 30;
-  let stateX = 0;
-  let stateY = 0;
+  // Draw the markers on Y-axis
+  for (let i = step; i < canvas.height; i += step) {
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2 - 5, i);
+    ctx.lineTo(canvas.width / 2 + 5, i);
+    ctx.stroke();
 
-  const redBall = document.getElementById('redBall')
-
-  let origin = container.children[originDivIndex];
-  origin.classList.add('origin');
-
-  // Axis X
-  let axisX = [];
-
-  for (let i = axisStartIndex; i < axisEndIndex; i++) {
-  axisX.push(container.children[i]);
-  }
-  axisX.forEach((sq) => sq.classList.add('thick-line-bottom'));
-
-  // Axis Y
-  let axisY = [];
-
-  for (let i = 0; i < totalSquares; i += boundaryModCoordinate) {
-    if (i % 2 == 1 ){ // to avoid drawing the second line
-      axisY.push(container.children[i]);
-    }
-  }
-  axisY.forEach((sq) => sq.classList.add('thick-line-left'));
-
-  // Draw arrow x
-  container.children[originDivIndex + boundaryModCoordinate - 1].classList.add('right-axis-end');
-  const arrowRight = container.appendChild(document.createElement('div'));
-  arrowRight.classList.add('arrow-right');
-
-  // Draw arrow y
-  container.children[boundaryModCoordinate + 1 ].classList.add('top-axis-end');
-  const arrowUp = container.appendChild(document.createElement('div'));
-  arrowUp.classList.add('arrow-up');
-
-  function moveBall(xVal, yVal) {
-    let x = 0;
-    let y = 0;
-    [x, y] = convertToGridCoordinates(xVal, yVal);
-    [x, y] = shiftForBallSize(x, y);
-
-    return [x, y];
+    // Draw the label
+    let label = (canvas.height / 2 - i) / step;
+    ctx.fillText(label, canvas.width / 2 + 10, i + 5);
   }
 
-  function shiftForBallSize(x, y) {
-    x = x - redBallSize / 2;
-    return [x, y];
-  }
+  // Draw arrow on axis-X
+  ctx.beginPath();
+  ctx.moveTo(canvas.width - 10, canvas.height / 2 - 5);
+  ctx.lineTo(canvas.width, canvas.height / 2);
+  ctx.lineTo(canvas.width - 10, canvas.height / 2 + 5);
+  ctx.stroke();
 
-  function render(el, x, y) {
-    el.style.left = `${x}px`;
-    el.style.top = `${y}px`;
-  }
+  // Draw arrow on axis-Y
+  ctx.beginPath();
+  ctx.moveTo(canvas.width / 2 - 5, 10);
+  ctx.lineTo(canvas.width / 2, 0);
+  ctx.lineTo(canvas.width / 2 + 5, 10);
+  ctx.stroke();
 
-  function convertToGridCoordinates(x,y) {
-    let xGrid = 0;
-    let yGrid= 0;
+  document.getElementById('jump').addEventListener('click', function(e) {
+    e.preventDefault();
+    let guessX = document.getElementById('x').value;
+    let guessY = document.getElementById('y').value;
 
-    if (x > -boundaryModCoordinate && x < boundaryModCoordinate &&
-      y > -boundaryModCoordinate && y < boundaryModCoordinate) {
-      xGrid = boundaryModCoordinate * 20 + x * 20;
-      yGrid= boundaryModCoordinate * 20 - (y + 1) * 20;
+    // Convert guess coordinates to canvas coordinates
+    let canvasX = guessX * step + canvas.width / 2;
+    let canvasY = canvas.height / 2 - guessY * step;
 
+    const redBall = document.getElementById('redBall');
+    redBall.classList.remove('hidden');
+    redBall.style.left = canvasX - 8 + 'px';
+    redBall.style.top = canvasY - 8 + 'px';
+    // Draw projection lines
+    ctx.strokeStyle = 'red';
+    ctx.beginPath();
+    ctx.moveTo(canvasX, canvasY);
+    ctx.lineTo(canvasX, canvas.height / 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(canvasX, canvasY);
+    ctx.lineTo(canvas.width / 2, canvasY);
+    ctx.stroke();
+
+    if (guessX == generatedX && guessY == generatedY) {
+      document.getElementById('result').innerHTML = 'You guessed right!';
     } else {
-      alert('Red ball fell off the grid. Please try again.');
+      document.getElementById('result').innerHTML = 'You guessed wrong!';
     }
+  });
 
-  return [xGrid, yGrid];
+  function generateRandomPoint() {
+    // Generate random coordinates
+    let x = Math.floor(Math.random() * 11 - 5);
+    let y = Math.floor(Math.random() * 11 - 5);
+    // Draw a point at the guessed coordinates
+    ctx.beginPath();
+    ctx.fillStyle = 'green';
+    ctx.arc(canvas.width / 2 + x*step, canvas.height / 2 - y*step, 5, 0, 2 * Math.PI);
+    ctx.fill();
+    return { x: x, y: y };
   }
 
-  // Form and coords input handling
-  const form=document.getElementById("coords");
-
-  function submitForm(event) {
-    let xVal = parseInt(form.x.value);
-    let yVal = parseInt(form.y.value);
-    event.preventDefault();
-    render(redBall, ...moveBall(xVal, yVal));
-    validate(xVal, yVal);
-  }
-
-  form.addEventListener('submit', submitForm);
-
-  // Initial render
-  render(redBall, ...moveBall(0, 0));
-
-  // block spawning
-  const block = document.getElementById('block');
-
-  function spawnBlock() {
-    let xVal = Math.floor(Math.random() * 36) - 18;
-    let yVal = Math.floor(Math.random() * 36) - 18;
-    [x, y] = convertToGridCoordinates(xVal, yVal);
-    block.classList.remove('hidden');
-    render(block, x - 18, y + 20);
-
-    const point = document.getElementById('point');
-    render(point, x - 3, y + 17);
-
-    return [xVal, yVal];
-  }
-
-  function generate() {
-    [x, y] = spawnBlock();
-    const instructions = document.getElementById('instructions');
-    instructions.innerHTML = `(${x}, ${y})`;
-    return [x, y];
-  }
-
-  [stateX, stateY] = generate();
-
-  function validate(x, y) {
-    let xVal = parseInt(form.x.value);
-    let yVal = parseInt(form.y.value);
-
-    if (xVal == stateX && yVal == stateY) {
-      [stateX, stateY] = generate();
-    }
-  }
-
-  // not needed atm
-  function convertedToSingleIndex(xVal, yVal) {
-    // bottom left
-    return -yVal * rowColCount + xVal + originDivIndex;
-  }
+  ({ x: generatedX, y: generatedY } = generateRandomPoint());
+  console.log("generated point: ", generatedX, generatedY);
 }
