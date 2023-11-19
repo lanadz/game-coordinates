@@ -17,9 +17,12 @@ body {
 
 h1,
 h3,
-h5,
+h5{
+ color: white;
+}
+
 p {
-color: white;
+  color: teal;
 }
 
 h1 {
@@ -40,8 +43,13 @@ h3 {
 }
 
 .red {
-  color: red;
+  color: red !important;
 }
+
+.green {
+  color: green !important;
+}
+
 .horizontal-container {
   display: flex;
   flex-direction: row;
@@ -61,8 +69,9 @@ h3 {
   left: 0;
   height: 500px;
   width: 500px;
-  border: 1px solid gray;
   background-color: white;
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 #redBall.red-ball {
@@ -112,21 +121,22 @@ form.coords {
 }
 
 .coords input {
-  height: 1em;
+  height: 3em;
   font-size: 1em;
   margin: 0.5em;
   box-sizing: content-box;
   display: flex;
   border: 1px solid gray;
   width: 3em;
-  padding: 1em;
+  text-align: center;
 }
 
 .coords input[type="submit"] {
   background: red;
   color: #fff;
   display:flex;
-  padding: 1em;
+  text-align: center;
+  width: auto;
   border: 0px;
 }
 

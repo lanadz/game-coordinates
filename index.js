@@ -50,6 +50,9 @@ window.onload = () => {
   ctx.lineTo(canvas.width / 2 + 5, 10);
   ctx.stroke();
 
+  ({ x: generatedX, y: generatedY } = generateRandomPoint());
+  console.log("generated point: ", generatedX, generatedY);
+
   document.getElementById('jump').addEventListener('click', function(e) {
     e.preventDefault();
     let guessX = document.getElementById('x').value;
@@ -64,7 +67,7 @@ window.onload = () => {
     redBall.style.left = canvasX - 8 + 'px';
     redBall.style.top = canvasY - 8 + 'px';
     // Draw projection lines
-    ctx.strokeStyle = 'red';
+    ctx.strokeStyle = 'pink';
     ctx.beginPath();
     ctx.moveTo(canvasX, canvasY);
     ctx.lineTo(canvasX, canvas.height / 2);
@@ -74,13 +77,39 @@ window.onload = () => {
     ctx.lineTo(canvas.width / 2, canvasY);
     ctx.stroke();
 
-    if (guessX == generatedX && guessY == generatedY) {
+    if (guessX > 10 || guessY > 10 || guessX < -10 || guessY < -10) {
+      // Check if the guess is out of bounds
+      drawWrongGuess(guessX, guessY)
+      document.getElementById('result').innerHTML = 'RedBall flew away!';
+    } else if (guessX == generatedX && guessY == generatedY) {
       document.getElementById('result').innerHTML = 'You guessed right!';
+      document.getElementById('result').classList.add('green');
+      document.getElementById('result').classList.remove('red');
+      ({ x: generatedX, y: generatedY } = generateRandomPoint());
     } else {
       document.getElementById('result').innerHTML = 'You guessed wrong!';
+      document.getElementById('result').classList.add('red');
+      document.getElementById('result').classList.remove('green');
+
+      drawWrongGuess(guessX, guessY)
     }
   });
 
+  function drawWrongGuess(x, y) {
+    ctx.beginPath();
+    ctx.strokeStyle = 'red';
+
+    ctx.moveTo(canvas.width / 2 + x*step - 5, canvas.height / 2 - y*step - 5);
+    ctx.lineTo(canvas.width / 2 + x*step + 5, canvas.height / 2 - y*step + 5);
+
+    // Draw the second line of the cross
+    ctx.moveTo(canvas.width / 2 + x*step + 5, canvas.height / 2 - y*step - 5);
+    ctx.lineTo(canvas.width / 2 + x*step - 5, canvas.height / 2 - y*step + 5);
+
+    ctx.stroke();
+    // ctx.arc(canvas.width / 2 + x*step, canvas.height / 2 - y*step, 5, 0, 2 * Math.PI);
+    // ctx.fill();
+  }
   function generateRandomPoint() {
     // Generate random coordinates
     let x = Math.floor(Math.random() * 11 - 5);
@@ -93,6 +122,5 @@ window.onload = () => {
     return { x: x, y: y };
   }
 
-  ({ x: generatedX, y: generatedY } = generateRandomPoint());
-  console.log("generated point: ", generatedX, generatedY);
+
 }
