@@ -104,12 +104,26 @@ h3 {
   background-color: white;
   color: black;
   font-size: 1em;
-  /* display: flex; */
-  /* justify-content: center; */
-  /* align-items: center; */
   text-align: center;
   width: 100%;
   margin: 0.5em;
+}
+
+.instructions ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.instructions ul li {
+  margin: 0.5em;
+  font-size: 0.7em;
+}
+.instructions ul li.correct {
+  color: green;
+}
+.instructions ul li.incorrect {
+  color: red;
 }
 
 form.coords {

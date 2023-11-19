@@ -3,6 +3,7 @@ window.onload = () => {
   const canvas = document.getElementById('coordinate-system');
   const ctx = canvas.getContext('2d');
   const step = 25;
+  let history = [];
 
   // Draw the axes
   ctx.beginPath();
@@ -54,6 +55,7 @@ window.onload = () => {
   console.log("generated point: ", generatedX, generatedY);
   const adjustmentY = 10;
 
+  // Guessing
   document.getElementById('jump').addEventListener('click', function(e) {
     e.preventDefault();
     let guessX = document.getElementById('x').value;
@@ -82,19 +84,52 @@ window.onload = () => {
       // Check if the guess is out of bounds
       drawWrongGuess(guessX, guessY)
       document.getElementById('result').innerHTML = 'RedBall flew away!';
+
+      history.push({ x: guessX, y: guessY, status: "incorrect" });
+
     } else if (guessX == generatedX && guessY == generatedY) {
       document.getElementById('result').innerHTML = 'You guessed right!';
       document.getElementById('result').classList.add('green');
       document.getElementById('result').classList.remove('red');
+
+      history.push({ x: guessX, y: guessY, status: "correct" });
+
+      drawCorrectGuess(guessX, guessY);
       ({ x: generatedX, y: generatedY } = generateRandomPoint());
+
     } else {
       document.getElementById('result').innerHTML = 'You guessed wrong!';
       document.getElementById('result').classList.add('red');
       document.getElementById('result').classList.remove('green');
 
+      history.push({ x: guessX, y: guessY, status: "incorrect" });
       drawWrongGuess(guessX, guessY)
     }
+
+    renderHistory();
   });
+
+  // render history
+  function renderHistory() {
+    const historyElement = document.getElementById('history');
+    historyElement.innerHTML = ''; // Clear the history element
+
+    history.forEach((guess, index) => {
+      let ulElement = document.createElement('ul');
+
+      const listItem = document.createElement('li');
+      listItem.textContent = `${index + 1}: (${guess.x}, ${guess.y})`;
+
+      if (guess.status === 'incorrect') {
+        listItem.classList.add('incorrect');
+      } else {
+        listItem.classList.add('correct');
+      }
+
+      ulElement.appendChild(listItem);
+      historyElement.appendChild(ulElement);
+    });
+  }
 
   function drawWrongGuess(x, y) {
     ctx.beginPath();
@@ -108,20 +143,26 @@ window.onload = () => {
     ctx.lineTo(canvas.width / 2 + x*step - 5, canvas.height / 2 - y*step + 5);
 
     ctx.stroke();
-    // ctx.arc(canvas.width / 2 + x*step, canvas.height / 2 - y*step, 5, 0, 2 * Math.PI);
-    // ctx.fill();
   }
+
+  function drawCorrectGuess(x, y) {
+    ctx.beginPath();
+    ctx.fillStyle = "rgb(200, 200, 200)";
+    ctx.arc(canvas.width / 2 + x*step, canvas.height / 2 - y*step, 5, 0, 2 * Math.PI);
+    ctx.fill();
+  }
+
   function generateRandomPoint() {
     // Generate random coordinates
     let x = Math.floor(Math.random() * 11 - 5);
     let y = Math.floor(Math.random() * 11 - 5);
     // Draw a point at the guessed coordinates
     ctx.beginPath();
-    ctx.fillStyle = 'green';
+    ctx.strokeStyle = 'green';
+    ctx.fillStyle = 'lime';
     ctx.arc(canvas.width / 2 + x*step, canvas.height / 2 - y*step, 5, 0, 2 * Math.PI);
     ctx.fill();
+    ctx.stroke();
     return { x: x, y: y };
   }
-
-
 }
