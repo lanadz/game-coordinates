@@ -9,6 +9,7 @@ window.onload = () => {
   drawCoordinateSystem();
 
   ({ x: generatedX, y: generatedY } = generateRandomPoint());
+  renderPoint(generatedX, generatedY);
   console.log("generated point: ", generatedX, generatedY);
   const adjustmentY = 10;
 
@@ -53,6 +54,7 @@ window.onload = () => {
 
       drawCorrectGuess(guessX, guessY);
       ({ x: generatedX, y: generatedY } = generateRandomPoint());
+      renderPoint(generatedX, generatedY);
 
     } else {
       document.getElementById('result').innerHTML = 'You guessed wrong!';
@@ -71,6 +73,7 @@ window.onload = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawCoordinateSystem();
     ({ x: generatedX, y: generatedY } = generateRandomPoint());
+    renderPoint(generatedX, generatedY);
     history = [];
     document.getElementById('result').innerHTML = '';
 
@@ -125,6 +128,10 @@ window.onload = () => {
     // Generate random coordinates
     let x = Math.floor(Math.random() * 11 - 5);
     let y = Math.floor(Math.random() * 11 - 5);
+    return { x: x, y: y };
+  }
+
+  function renderPoint(x, y) {
     // Draw a point at the guessed coordinates
     ctx.beginPath();
     ctx.strokeStyle = 'green';
@@ -132,7 +139,6 @@ window.onload = () => {
     ctx.arc(canvas.width / 2 + x*step, canvas.height / 2 - y*step, 5, 0, 2 * Math.PI);
     ctx.fill();
     ctx.stroke();
-    return { x: x, y: y };
   }
 
   function drawCoordinateSystem() {
@@ -184,4 +190,16 @@ window.onload = () => {
     ctx.lineTo(canvas.width / 2 + 5, 10);
     ctx.stroke();
   }
+
+  document.getElementById('writeCoordinates').addEventListener('click', function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawCoordinateSystem();
+    ({ x: generatedX, y: generatedY } = generateRandomPoint());
+    renderPoint(generatedX, generatedY);
+    history = [];
+    document.getElementById('result').innerHTML = '';
+
+    redBall.classList.add('hidden');
+    renderHistory();
+  });
 }
