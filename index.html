@@ -3,14 +3,14 @@
 
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="assets/styles.css?v=3">
-    <script defer src="index.js"></script>
+    <link rel="stylesheet" href="assets/styles.css?v=20231119230313">
+    <script defer src="index.js?v=20231119230313"></script>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"></link>
-    <title>RedBall coordinates</title>
+    <title>Coordinates with Red Ball</title>
   </head>
 
   <body>
-    <h1>Move <span class="red">Red Ball</span> around!</h1>
+    <h1>Coordinates with <span class="red">Red Ball</span></h1>
 
     <div class="horizontal-container">
       <div class="vertical-container">
@@ -23,8 +23,15 @@
         <form id="coords" class="form" name="coords" action="" method="get">
           <label for="x">x</label><input type="number" name="x" id="x" size="2" placeholder="0" value="0" />
           <label for="y">y</label><input type="number" name="y" id="y" size="2" placeholder="0" value="0"/>
-          <input type="submit" id="jump" value="Jump"/>
+          <input type="submit" id="jump" value="Go!"/>
         </form>
+
+        <p id="plot" class="form hidden">
+          (
+          <span id="xToPlot"></span>,
+          <span style="display: inline;" id="yToPlot"></span>
+          )
+        </p>
 
         <div id="result" class="instructions"></div>
 
@@ -48,7 +55,7 @@
     </div>
 
     <p>Andrew, you are the best!</p>
-    <p>Svitlana Dzyuban &copy; 2023</p>
+    <p class="small">Svitlana Dzyuban &copy; 2023</p>
 
   </body>
 </html>

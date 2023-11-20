@@ -1,5 +1,4 @@
 window.onload = () => {
-
   const canvas = document.getElementById('coordinate-system');
   const ctx = canvas.getContext('2d');
   const step = 25;
@@ -50,7 +49,7 @@ window.onload = () => {
       let ulElement = document.createElement('ul');
 
       const listItem = document.createElement('li');
-      listItem.textContent = `${index + 1}: (${guess.x}, ${guess.y})`;
+      listItem.innerHTML = `<p>${index + 1}: (${guess.x}, ${guess.y})</p>`;
 
       if (guess.status === 'incorrect') {
         listItem.classList.add('incorrect');
@@ -149,6 +148,10 @@ window.onload = () => {
     ctx.lineTo(canvas.width / 2, 0);
     ctx.lineTo(canvas.width / 2 + 5, 10);
     ctx.stroke();
+
+    // Draw the X and Y labels
+    ctx.fillText("X", canvas.width - 10, canvas.height / 2 + 15);
+    ctx.fillText("Y", canvas.width / 2 + 10, 10);
   }
 
   document.getElementById('writeCoordinates').addEventListener('click', function(e) {
@@ -173,8 +176,9 @@ window.onload = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawCoordinateSystem();
     ({ x: generatedX, y: generatedY } = generateRandomPoint());
-    document.getElementById('x').value = generatedX;
-    document.getElementById('y').value = generatedY;
+    document.getElementById('xToPlot').innerText = generatedX;
+    document.getElementById('yToPlot').innerText = generatedY;
+
     history = [];
     document.getElementById('result').innerHTML = '';
 
@@ -184,8 +188,8 @@ window.onload = () => {
     renderHistory();
   });
 
-   // Guessing
-   document.getElementById('jump').addEventListener('click', function(e) {
+  // Guessing
+  document.getElementById('jump').addEventListener('click', function(e) {
     e.preventDefault();
     let guessX = document.getElementById('x').value;
     let guessY = document.getElementById('y').value;
@@ -214,7 +218,7 @@ window.onload = () => {
       history.push({ x: guessX, y: guessY, status: "incorrect" });
 
     } else if (guessX == generatedX && guessY == generatedY) {
-      document.getElementById('result').innerHTML = 'You guessed right!';
+      document.getElementById('result').innerHTML = 'Correct!';
       document.getElementById('result').classList.add('green');
       document.getElementById('result').classList.remove('red');
 
@@ -225,7 +229,7 @@ window.onload = () => {
       renderPoint(generatedX, generatedY);
 
     } else {
-      document.getElementById('result').innerHTML = 'You guessed wrong!';
+      document.getElementById('result').innerHTML = 'Try again!';
       document.getElementById('result').classList.add('red');
       document.getElementById('result').classList.remove('green');
 
@@ -236,12 +240,26 @@ window.onload = () => {
     renderHistory();
   });
 
-  document.getElementById('clean').addEventListener('click', function(e) {
+  document.getElementById('clean').addEventListener('click', function (e) {
     e.preventDefault();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawCoordinateSystem();
     ({ x: generatedX, y: generatedY } = generateRandomPoint());
-    document.getElementById('result').innerHTML = '';
+    history = [];
+
+    if (mode === 'write') {
+      renderPoint(generatedX, generatedY);
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('x').value = 0;
+      document.getElementById('y').value = 0;
+    } else {
+      document.getElementById('xToPlot').innerText = generatedX;
+      document.getElementById('yToPlot').innerText = generatedY;
+      document.getElementById('result').innerHTML = '';
+    }
+
+    redBall.classList.add('hidden');
+    renderHistory();
 
     togglePlot();
     redBall.classList.add('hidden');
@@ -249,8 +267,12 @@ window.onload = () => {
 
   function togglePlot() {
     if (mode === 'plot') {
+      document.getElementById('plot').classList.remove('hidden');
+      document.getElementById('coords').classList.add('hidden');
       document.getElementById('coordinate-system').addEventListener('click', handleClickOnCanvas);
     } else {
+      document.getElementById('coords').classList.remove('hidden');
+      document.getElementById('plot').classList.add('hidden');
       document.getElementById('coordinate-system').removeEventListener('click', handleClickOnCanvas);
     }
     history = [];
@@ -273,8 +295,8 @@ window.onload = () => {
 
     const humanX = (adjustedX - canvas.width / 2) / step;
     const humanY = (canvas.height / 2 - adjustedY) / step;
-    const correctX = document.getElementById('x').value;
-    const correctY = document.getElementById('y').value;
+    const correctX = document.getElementById('xToPlot').innerText;
+    const correctY = document.getElementById('yToPlot').innerText;
 
     if (humanX == correctX && humanY == correctY) {
       history.push({ x: humanX, y: humanY, status: "correct" });
@@ -285,9 +307,14 @@ window.onload = () => {
       ctx.fill();
       ctx.stroke();
       drawRedBall(adjustedX, adjustedY);
+
+      document.getElementById('result').innerHTML = 'Correct!';
+      document.getElementById('result').classList.add('green');
+      document.getElementById('result').classList.remove('red');
+
       ({ x: generatedX, y: generatedY } = generateRandomPoint());
-      document.getElementById('x').value = generatedX;
-      document.getElementById('y').value = generatedY;
+      document.getElementById('xToPlot').innerText = generatedX;
+      document.getElementById('yToPlot').innerText = generatedY;
     } else {
       ctx.strokeStyle = 'black';
       ctx.fillStyle = 'gray';
@@ -296,6 +323,10 @@ window.onload = () => {
       ctx.fill();
       ctx.stroke();
       history.push({ x: humanX, y: humanY, status: "incorrect" });
+
+      document.getElementById('result').innerHTML = 'Try again!';
+      document.getElementById('result').classList.add('red');
+      document.getElementById('result').classList.remove('green');
     }
 
 
