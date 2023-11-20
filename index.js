@@ -241,12 +241,10 @@ window.onload = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawCoordinateSystem();
     ({ x: generatedX, y: generatedY } = generateRandomPoint());
-    renderPoint(generatedX, generatedY);
-    history = [];
     document.getElementById('result').innerHTML = '';
 
+    togglePlot();
     redBall.classList.add('hidden');
-    renderHistory();
   });
 
   function togglePlot() {
@@ -255,6 +253,8 @@ window.onload = () => {
     } else {
       document.getElementById('coordinate-system').removeEventListener('click', handleClickOnCanvas);
     }
+    history = [];
+    renderHistory();
   }
 
   function handleClickOnCanvas(e) {
@@ -264,22 +264,42 @@ window.onload = () => {
 
     // Call your function to plot a point
     plotPoint(x, y);
-   }
+  }
 
   function plotPoint(x, y) {
-      const size = 5; // Size of the point
-      // Adjust x and y to snap to the closest integer on the coordinate system
-      const adjustedX = Math.round(x / step) * step;
-      const adjustedY = Math.round(y / step) * step;
+    // Adjust x and y to snap to the closest integer on the coordinate system
+    const adjustedX = Math.round(x / step) * step;
+    const adjustedY = Math.round(y / step) * step;
 
+    const humanX = (adjustedX - canvas.width / 2) / step;
+    const humanY = (canvas.height / 2 - adjustedY) / step;
+    const correctX = document.getElementById('x').value;
+    const correctY = document.getElementById('y').value;
+
+    if (humanX == correctX && humanY == correctY) {
+      history.push({ x: humanX, y: humanY, status: "correct" });
+      ctx.strokeStyle = 'darkred';
+      ctx.fillStyle = 'red';
       ctx.beginPath();
-      ctx.strokeStyle = 'green';
-      ctx.fillStyle = 'lime';
       ctx.arc(adjustedX, adjustedY, 5, 0, 2 * Math.PI);
       ctx.fill();
       ctx.stroke();
-
-      //ctx.fillRect(adjustedX - size / 2, adjustedY - size / 2, size, size);
+      drawRedBall(adjustedX, adjustedY);
+      ({ x: generatedX, y: generatedY } = generateRandomPoint());
+      document.getElementById('x').value = generatedX;
+      document.getElementById('y').value = generatedY;
+    } else {
+      ctx.strokeStyle = 'black';
+      ctx.fillStyle = 'gray';
+      ctx.beginPath();
+      ctx.arc(adjustedX, adjustedY, 5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+      history.push({ x: humanX, y: humanY, status: "incorrect" });
     }
+
+
+    renderHistory();
   }
+}
 
