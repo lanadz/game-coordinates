@@ -22,6 +22,7 @@ window.onload = () => {
       document.getElementById('x').removeAttribute('readonly');
       document.getElementById('y').removeAttribute('readonly');
       document.getElementById('jump').classList.remove('hidden');
+      togglePlot();
     } else {
       document.getElementById('writeCoordinates').classList.remove('active');
       document.getElementById('plotPoint').classList.add('active');
@@ -29,7 +30,7 @@ window.onload = () => {
       document.getElementById('x').setAttribute('readonly', true);
       document.getElementById('y').setAttribute('readonly', true);
       document.getElementById('jump').classList.add('hidden');
-
+      togglePlot();
     }
   }
 
@@ -248,4 +249,37 @@ window.onload = () => {
     renderHistory();
   });
 
-}
+  function togglePlot() {
+    if (mode === 'plot') {
+      document.getElementById('coordinate-system').addEventListener('click', handleClickOnCanvas);
+    } else {
+      document.getElementById('coordinate-system').removeEventListener('click', handleClickOnCanvas);
+    }
+  }
+
+  function handleClickOnCanvas(e) {
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Call your function to plot a point
+    plotPoint(x, y);
+   }
+
+  function plotPoint(x, y) {
+      const size = 5; // Size of the point
+      // Adjust x and y to snap to the closest integer on the coordinate system
+      const adjustedX = Math.round(x / step) * step;
+      const adjustedY = Math.round(y / step) * step;
+
+      ctx.beginPath();
+      ctx.strokeStyle = 'green';
+      ctx.fillStyle = 'lime';
+      ctx.arc(adjustedX, adjustedY, 5, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.stroke();
+
+      //ctx.fillRect(adjustedX - size / 2, adjustedY - size / 2, size, size);
+    }
+  }
+
