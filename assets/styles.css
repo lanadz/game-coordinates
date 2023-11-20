@@ -147,6 +147,7 @@ h3 {
 
 .form input {
   height: 3em;
+  line-height: 3em;
   font-size: 1em;
   margin: 0.5em;
   box-sizing: content-box;
